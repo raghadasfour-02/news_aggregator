@@ -1,34 +1,52 @@
 from django.shortcuts import render
-import requests
-from bs4 import BeautifulSoup
+from .models import Article, Feed
+from .forms import FeedForm
+from django.shortcuts import redirect
 
-# News from The New York Times Canada
+import feedparser
+import datetime
 
-toi_r = requests.get("https://www.nytimes.com/ca/section/politics")
-toi_soup = BeautifulSoup(toi_r.content, 'html5lib')
+# Create your views here.
 
-toi_headings = toi_soup.find_all('h2')
+def articles_list(request):
+    articles = Article.objects.all()
 
-toi_headings = toi_headings[0:-13] # removing footers
+    rows = [articles[x:x+1] for x in range(0, len(articles), 1)]
 
-toi_news = []
+    return render(request, 'news/articles_list.html', {'rows': rows})
 
-for th in toi_headings:
-    toi_news.append(th.text)
+def feeds_list(request):
+    feeds = Feed.objects.all()
+    return render(request, 'news/feeds_list.html', {'feeds': feeds})
 
+def new_feed(request):
+    if request.method == "POST":
+        form = FeedForm(request.POST)
+        if form.is_valid():
+            feed = form.save(commit=False)
 
+            existingFeed = Feed.objects.filter(url = feed.url)
+            if len(existingFeed) == 0:
+                feedData = feedparser.parse(feed.url)
 
-# News from CNN 
+                # set some fields
+                feed.title = feedData.feed.title
+                feed.save()
 
-ht_r = requests.get("https://www.cnn.com/politics")
-ht_soup = BeautifulSoup(ht_r.content, 'html5lib')
-ht_headings = ht_soup.findAll("div", {"class": "headingfour"})
-ht_headings = ht_headings[2:]
-ht_news = []
+                for entry in feedData.entries:
+                    article = Article()
+                    article.title = entry.title
+                    article.url = entry.link
+                    article.description = entry.description
 
-for hth in ht_headings:
-    ht_news.append(hth.text)
+                    d = datetime.datetime(*(entry.published_parsed[0:6]))
+                    dateString = d.strftime('%Y-%m-%d %H:%M:%S')
 
+                    article.publication_date = dateString
+                    article.feed = feed
+                    article.save()
 
-def index(req):
-    return render(req, 'news/index.html', {'toi_news':toi_news, 'ht_news': ht_news})
+            return redirect('news.views.feeds_list')
+    else:
+        form = FeedForm()
+    return render(request, 'news/new_feed.html', {'form': form})
