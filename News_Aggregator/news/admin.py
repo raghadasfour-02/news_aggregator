@@ -1,6 +1,6 @@
 from django.contrib import admin
-from news.models import feed, article
+from .models import Feed, Article
 # Register your models here.
 
-admin.site.register(feed)
-admin.site.register(article)
+admin.site.register(Feed)
+admin.site.register(Article)
