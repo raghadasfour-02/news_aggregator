@@ -50,7 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'newsproject.urls'
+ROOT_URLCONF = 'News_Aggregator.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'newsproject.wsgi.application'
+WSGI_APPLICATION = 'News_Aggregator.wsgi.application'
 
 
 # Database
