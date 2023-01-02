@@ -14,10 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from . import views
+from news.views import scrape, news_list
 
 urlpatterns = [
-    path(r'^$', views.articles_list, name='articles_list'),
-    path(r'^feeds/new', views.new_feed, name='feed_new'),
-    path(r'^feeds/', views.feeds_list, name='feeds_list')
+  path('scrape/', scrape, name="scrape"),
+  path('', news_list, name="home"),
 ]
