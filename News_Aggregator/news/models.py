@@ -9,6 +9,8 @@ class Feed(models.Model):
 class Article(models.Model):
     feed = models.ForeignKey(on_delete=models.deletion.CASCADE, to='news.Feed')
     title = models.CharField(max_length=200)
+    url = models.TextField(blank=True)
+    image = models.URLField(null=True, blank=True)
     description = models.TextField()
 
     def __str__(self):
