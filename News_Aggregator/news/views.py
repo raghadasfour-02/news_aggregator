@@ -6,7 +6,7 @@ from news.models import Article
 def scrape(request):
     session = requests.Session()
     session.headers = {"User-Agent": "Googlebot/2.1 (+http://www.google.com/bot.html)"}
-    url = "https://www.theonion.com/"
+    url = "https://www.nytimes.com/"
     content = session.get(url, verify=False).content
     soup = BSoup(content, "html.parser")
     News = soup.find_all('div', {"class":"curation-module__item"})
@@ -23,8 +23,8 @@ def scrape(request):
     return redirect("../")
 
 def news_list(request):
-    headlines = Article.objects.all()[::-1]
+    articles = Article.objects.all()[::-1]
     context = {
-        'object_list': headlines,
+        'object_list': articles,
     }
     return render(request, "news/home.html", context)
