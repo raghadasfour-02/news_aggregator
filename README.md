@@ -1,5 +1,5 @@
 # Raghad's News Aggregator
-A web app designed to curate news articles and keep you up to date with what's going on in the world.
+A web app designed to curate news articles and keep you up to date with the latest global news.
 
 ### Inspiration
 Most of us are generally aware of the bias we expose ourselves to when reading news from one source. That being said, it takes too much work to conduct a thorough investigation of *everything* we read on the internet. I decided to improve my Python skills using Django's framework to create a news aggregator. This aggregator aims to provide you with several sources for news all in one. Ultimately, the goal is to make it easier to explore other perspectives when reading about what's happening in the world. 
